@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김태우 (VV743) | 개발자 프로필</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+  <div class="background-glow glow-1"></div>
+  <div class="background-glow glow-2"></div>
+
+  <main class="profile-container">
+    <!-- 테마 토글 버튼 -->
+    <header class="top-nav">
+      <div class="badge status-badge">
+        <span class="status-dot"></span> Available for Projects
+      </div>
+      <button id="theme-toggle" class="icon-button" aria-label="테마 전환" title="다크/라이트 모드 전환">
+        <span class="icon-theme">☀️</span>
+      </button>
+    </header>
+
+    <!-- 프로필 헤더 -->
+    <section class="profile-header">
+      <div class="avatar-wrapper">
+        <img src="https://avatars.githubusercontent.com/u/188890878?v=4" alt="김태우 프로필 사진" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=VV&background=6366f1&color=fff&size=200'">
+        <span class="verified-badge">✓</span>
+      </div>
+      <h1 class="user-name">김태우 <span class="user-handle">(@VV743)</span></h1>
+      <p class="user-role">Junior Software Developer & Vibe Coder</p>
+    </section>
+
+    <!-- 개발자 소개글 영역 -->
+    <section class="bio-card">
+      <div class="bio-header">
+        <span class="bio-label">💬 DEVELOPER BIO</span>
+        <div class="bio-presets" id="bio-presets">
+          <button class="preset-btn active" data-index="0" title="추천 1: 열정 & 성장형">추천 1</button>
+          <button class="preset-btn" data-index="1" title="추천 2: AI & 실용형">추천 2</button>
+          <button class="preset-btn" data-index="2" title="추천 3: 사용자 & 문제해결형">추천 3</button>
+        </div>
+      </div>
+      <p class="bio-text" id="bio-content">
+        <!-- JS로 동적 렌더링 -->
+      </p>
+      <div class="bio-type-tag" id="bio-type-tag">성장 & 열정형</div>
+    </section>
+
+    <!-- 기술 스택 태그 -->
+    <section class="skills-section">
+      <h2 class="section-title">Tech Stack</h2>
+      <div class="skill-tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">Python</span>
+        <span class="tag">HTML5 / CSS3</span>
+        <span class="tag">Git & GitHub</span>
+        <span class="tag">AI Vibe Coding</span>
+        <span class="tag">Vite</span>
+      </div>
+    </section>
+
+    <!-- 링크 목록 (MyLink 스타일) -->
+    <section class="links-section">
+      <h2 class="section-title">Links & Contact</h2>
+      <div class="link-list">
+        <a href="https://github.com/VV743" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-icon">🐙</div>
+          <div class="link-info">
+            <span class="link-title">GitHub Profile</span>
+            <span class="link-desc">github.com/VV743</span>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+
+        <a href="https://github.com/VV743/vv" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-icon">📦</div>
+          <div class="link-info">
+            <span class="link-title">vv Project Repository</span>
+            <span class="link-desc">프로젝트 소스 코드 저장소</span>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+
+        <button class="link-card action-card" id="copy-email-btn" data-email="188890878+VV743@users.noreply.github.com">
+          <div class="link-icon">✉️</div>
+          <div class="link-info">
+            <span class="link-title">Email Contact</span>
+            <span class="link-desc" id="email-text">이메일 주소 복사하기</span>
+          </div>
+          <span class="arrow" id="email-arrow">📋</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+      <p>© 2026 김태우 (VV743). Built with Antigravity & Vibe Coding.</p>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast">클립보드에 복사되었습니다!</div>
+
+  <script src="main.js"></script>
+</body>
+</html>
