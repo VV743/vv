@@ -1,232 +1,227 @@
-// ========================================================
-// 김태우 (VV743) - 모던 개발자 프로필 스크립트 (main.js)
-// ========================================================
+// ==========================================================================
+// NEOBRUTALISM PROFILE LOGIC (main.js)
+// Tactile clicks, window tab controls, cheer counter & theme switcher
+// ==========================================================================
 
-// 1. 추천 개발자 소개글 데이터
+// 1. 추천 개발자 바이오 데이터
 const developerBioPresets = [
   {
-    category: "성장 & 열정형",
-    text: "💡 기술로 아이디어를 현실로 구현하는 것을 즐기는 개발자 김태우입니다. 항상 새로운 것을 배우고 탐구하며, 매일 한 걸음씩 더 단단한 엔지니어로 성장하고 있습니다."
+    category: "성장 & 열정형 💡",
+    text: "💡 기술로 아이디어를 실물 소프트웨어로 구현하는 것에 진심인 개발자 김태우입니다. 항상 새로운 기술을 학습하고 흡수하며, 매일 더 단단하고 실용적인 엔지니어로 성장하고 있습니다."
   },
   {
-    category: "AI & 바이브 코딩형",
-    text: "⚡ 최신 AI 도구와 모던 웹 생태계를 융합하여 상상을 신속하게 소프트웨어로 실현하는 바이브 코더(Vibe Coder)입니다. 빠른 프로토타이핑과 기민한 문제 해결을 지향합니다."
+    category: "AI & 바이브 코딩형 ⚡",
+    text: "⚡ 최신 AI 어시스턴트와 최첨단 웹 기술을 페어링하여 아이디어를 빛의 속도로 실체화하는 바이브 코더(Vibe Coder)입니다. 빠른 프로토타이핑과 집요한 문제 해결을 즐깁니다."
   },
   {
-    category: "사용자 & 문제 해결형",
-    text: "🛠️ 일상의 불편함을 기술로 해결하고 더 나은 사용자 경험을 만드는 데 집중합니다. 직관적이고 깔끔한 코드로 사람들에게 실질적인 가치를 전하고자 합니다."
+    category: "사용자 & 문제 해결형 🛠️",
+    text: "🛠️ 일상의 불편함을 예리하게 포착해 깔끔한 코드로 해결합니다. 직관적인 인터페이스와 군더더기 없는 성능으로 사람들에게 명확한 가치를 전달하는 제품을 지향합니다."
   }
 ];
 
 let currentBioIndex = 0;
 
-// DOM 요소 참조
+// DOM 요소 캐싱
 const bioContent = document.getElementById("bio-content");
 const bioCategory = document.getElementById("bio-category");
-const bioTabs = document.querySelectorAll(".tab-btn");
+const bioTabs = document.querySelectorAll(".neo-tab");
 const copyBioBtn = document.getElementById("copy-bio-btn");
 
 const themeToggleBtn = document.getElementById("theme-toggle");
 const themeIcon = document.querySelector(".theme-icon");
+const themeLabel = document.getElementById("theme-label");
+
 const shareBtn = document.getElementById("share-btn");
 const copyEmailBtn = document.getElementById("copy-email-btn");
 
 const cheerBtn = document.getElementById("cheer-btn");
 const cheerCountEl = document.getElementById("cheer-count");
-const cheerIconEl = document.getElementById("cheer-icon");
 
 const toast = document.getElementById("toast");
 const toastText = document.getElementById("toast-text");
-const cursorGlow = document.getElementById("cursor-glow");
 
-const filterChips = document.querySelectorAll(".filter-chip");
-const skillItems = document.querySelectorAll(".skill-item");
+const filterTabs = document.querySelectorAll(".filter-tab");
+const skillBricks = document.querySelectorAll(".skill-brick");
 
-// ----------------------------------------------------
-// 토스트 메시지 헬퍼
-// ----------------------------------------------------
-let toastTimeout = null;
-function showToast(message, icon = "✨") {
-  if (toastTimeout) clearTimeout(toastTimeout);
-  
+// --------------------------------------------------------------------------
+// 2. 토스트 알림 헬퍼
+// --------------------------------------------------------------------------
+let toastTimer = null;
+function showNeoToast(message) {
+  if (toastTimer) clearTimeout(toastTimer);
   toastText.textContent = message;
-  const iconEl = toast.querySelector(".toast-icon");
-  if (iconEl) iconEl.textContent = icon;
-
   toast.classList.add("show");
-  toastTimeout = setTimeout(() => {
+
+  toastTimer = setTimeout(() => {
     toast.classList.remove("show");
-  }, 2300);
+  }, 2200);
 }
 
-// ----------------------------------------------------
-// 2. 바이오 탭 전환 로직
-// ----------------------------------------------------
+// --------------------------------------------------------------------------
+// 3. 바이오 탭 제어 로직
+// --------------------------------------------------------------------------
 function updateBio(index) {
   currentBioIndex = index;
   const bio = developerBioPresets[index];
 
   bioContent.style.opacity = "0";
-  bioContent.style.transform = "translateY(4px)";
+  bioContent.style.transform = "translateY(3px)";
 
   setTimeout(() => {
     bioContent.textContent = bio.text;
     if (bioCategory) bioCategory.textContent = bio.category;
     bioContent.style.opacity = "1";
     bioContent.style.transform = "translateY(0)";
-  }, 160);
+  }, 140);
 
-  bioTabs.forEach((btn, i) => {
+  bioTabs.forEach((tab, i) => {
     if (i === index) {
-      btn.classList.add("active");
+      tab.classList.add("active");
     } else {
-      btn.classList.remove("active");
+      tab.classList.remove("active");
     }
   });
 }
 
-bioTabs.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const index = parseInt(btn.getAttribute("data-index"), 10);
-    updateBio(index);
+bioTabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    const idx = parseInt(tab.getAttribute("data-index"), 10);
+    updateBio(idx);
   });
 });
 
+// 바이오 텍스트 복사
 if (copyBioBtn) {
   copyBioBtn.addEventListener("click", async () => {
     const textToCopy = developerBioPresets[currentBioIndex].text;
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      showToast("소개글이 클립보드에 복사되었습니다!", "📋");
-    } catch {
-      copyToClipboardFallback(textToCopy);
-      showToast("소개글이 클립보드에 복사되었습니다!", "📋");
-    }
+    await copyText(textToCopy);
+    showNeoToast("소개글 텍스트가 복사되었습니다!");
   });
 }
 
-// ----------------------------------------------------
-// 3. 다크 모드 / 라이트 모드 전환 로직
-// ----------------------------------------------------
-function applyTheme(isDark) {
+// --------------------------------------------------------------------------
+// 4. 다크 모드 / 라이트 모드 (Cyber Neobrutalism 토글)
+// --------------------------------------------------------------------------
+function setTheme(isDark) {
   if (isDark) {
     document.body.classList.remove("light-mode");
     document.body.classList.add("dark-mode");
     if (themeIcon) themeIcon.textContent = "☀️";
-    localStorage.setItem("user-theme", "dark");
+    if (themeLabel) themeLabel.textContent = "LIGHT";
+    localStorage.setItem("neo-theme", "dark");
   } else {
     document.body.classList.remove("dark-mode");
     document.body.classList.add("light-mode");
     if (themeIcon) themeIcon.textContent = "🌙";
-    localStorage.setItem("user-theme", "light");
+    if (themeLabel) themeLabel.textContent = "DARK";
+    localStorage.setItem("neo-theme", "light");
   }
 }
 
-// 저장된 테마 불러오기
-const savedTheme = localStorage.getItem("user-theme");
-if (savedTheme === "light") {
-  applyTheme(false);
+// 초기 테마 복원
+const savedNeoTheme = localStorage.getItem("neo-theme");
+if (savedNeoTheme === "dark") {
+  setTheme(true);
 } else {
-  applyTheme(true);
+  setTheme(false);
 }
 
 themeToggleBtn.addEventListener("click", () => {
   const isDark = document.body.classList.contains("dark-mode");
-  applyTheme(!isDark);
-  showToast(!isDark ? "다크 테마가 적용되었습니다" : "라이트 테마가 적용되었습니다", !isDark ? "🌙" : "☀️");
+  setTheme(!isDark);
+  showNeoToast(!isDark ? "다크 사이버 모드로 전환!" : "라이트 캔버스 모드로 전환!");
 });
 
-// ----------------------------------------------------
-// 4. 기술 스택 필터링 기능
-// ----------------------------------------------------
-filterChips.forEach(chip => {
-  chip.addEventListener("click", () => {
-    filterChips.forEach(c => c.classList.remove("active"));
-    chip.classList.add("active");
+// --------------------------------------------------------------------------
+// 5. 기술 스택 필터링 탭
+// --------------------------------------------------------------------------
+filterTabs.forEach(btn => {
+  btn.addEventListener("click", () => {
+    filterTabs.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
 
-    const filter = chip.getAttribute("data-filter");
-    skillItems.forEach(item => {
-      const category = item.getAttribute("data-category");
+    const filter = btn.getAttribute("data-filter");
+    skillBricks.forEach(brick => {
+      const category = brick.getAttribute("data-category");
       if (filter === "all" || category === filter) {
-        item.classList.remove("hidden");
+        brick.classList.remove("hidden");
       } else {
-        item.classList.add("hidden");
+        brick.classList.add("hidden");
       }
     });
   });
 });
 
-// ----------------------------------------------------
-// 5. 인터랙티브 응원하기 (+1 카운터 & 플로팅 하트 이펙트)
-// ----------------------------------------------------
-let cheerCount = parseInt(localStorage.getItem("dev-cheer-count") || "12", 10);
+// --------------------------------------------------------------------------
+// 6. 인터랙티브 응원하기 (+1 카운트 & 네오 팝핑 이모지)
+// --------------------------------------------------------------------------
+let cheerCount = parseInt(localStorage.getItem("neo-cheer-count") || "42", 10);
 if (cheerCountEl) cheerCountEl.textContent = cheerCount;
 
-function createFloatingHeart(e) {
-  const heart = document.createElement("span");
-  heart.textContent = ["💖", "✨", "👏", "🔥", "🚀"][Math.floor(Math.random() * 5)];
-  heart.style.position = "fixed";
-  heart.style.left = `${e.clientX || (window.innerWidth / 2)}px`;
-  heart.style.top = `${e.clientY || (window.innerHeight / 2)}px`;
-  heart.style.pointerEvents = "none";
-  heart.style.fontSize = "1.5rem";
-  heart.style.zIndex = "1000";
-  heart.style.transition = "all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1)";
-  heart.style.transform = "translate(-50%, -50%) scale(1)";
-  heart.style.opacity = "1";
+function popNeoParticle(e) {
+  const emojis = ["💥", "🔥", "🚀", "👏", "⚡", "❤️", "⭐"];
+  const particle = document.createElement("div");
+  particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  particle.style.position = "fixed";
+  particle.style.left = `${e.clientX || (window.innerWidth / 2)}px`;
+  particle.style.top = `${e.clientY || (window.innerHeight / 2)}px`;
+  particle.style.fontSize = "1.8rem";
+  particle.style.pointerEvents = "none";
+  particle.style.zIndex = "9999";
+  particle.style.fontWeight = "900";
+  particle.style.transition = "all 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28)";
+  particle.style.transform = "translate(-50%, -50%) scale(0.6) rotate(0deg)";
+  particle.style.opacity = "1";
 
-  document.body.appendChild(heart);
+  document.body.appendChild(particle);
 
-  const deltaX = (Math.random() - 0.5) * 80;
-  const deltaY = -70 - Math.random() * 50;
+  const angle = (Math.random() - 0.5) * 120;
+  const deltaX = (Math.random() - 0.5) * 160;
+  const deltaY = -80 - Math.random() * 80;
 
   requestAnimationFrame(() => {
-    heart.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px)) scale(1.4)`;
-    heart.style.opacity = "0";
+    particle.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px)) scale(1.6) rotate(${angle}deg)`;
+    particle.style.opacity = "0";
   });
 
   setTimeout(() => {
-    if (heart.parentNode) heart.parentNode.removeChild(heart);
-  }, 950);
+    if (particle.parentNode) particle.parentNode.removeChild(particle);
+  }, 850);
 }
 
 if (cheerBtn) {
   cheerBtn.addEventListener("click", (e) => {
     cheerCount += 1;
-    localStorage.setItem("dev-cheer-count", cheerCount);
+    localStorage.setItem("neo-cheer-count", cheerCount);
     if (cheerCountEl) cheerCountEl.textContent = cheerCount;
 
-    cheerBtn.classList.add("bounce");
-    setTimeout(() => cheerBtn.classList.remove("bounce"), 400);
-
-    createFloatingHeart(e);
+    popNeoParticle(e);
   });
 }
 
-// ----------------------------------------------------
-// 6. 클립보드 복사 헬퍼 & 이메일 / 링크 복사
-// ----------------------------------------------------
-function copyToClipboardFallback(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.style.position = "fixed";
-  textarea.style.opacity = "0";
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand("copy");
-  document.body.removeChild(textarea);
+// --------------------------------------------------------------------------
+// 7. 클립보드 복사 헬퍼 & 이메일 / 링크 공유
+// --------------------------------------------------------------------------
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const temp = document.createElement("textarea");
+    temp.value = text;
+    temp.style.position = "fixed";
+    temp.style.opacity = "0";
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    document.body.removeChild(temp);
+  }
 }
 
 if (copyEmailBtn) {
   copyEmailBtn.addEventListener("click", async () => {
     const email = copyEmailBtn.getAttribute("data-email");
-    try {
-      await navigator.clipboard.writeText(email);
-      showToast("이메일 주소가 복사되었습니다! 💌", "📧");
-    } catch {
-      copyToClipboardFallback(email);
-      showToast("이메일 주소가 복사되었습니다! 💌", "📧");
-    }
+    await copyText(email);
+    showNeoToast("이메일 주소가 복사되었습니다! ✉️");
   });
 }
 
@@ -236,31 +231,21 @@ if (shareBtn) {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: "김태우 (VV743) 개발자 프로필",
+          title: "김태우 (VV743) Neobrutalism Dev Profile",
           url: url
         });
       } else {
-        await navigator.clipboard.writeText(url);
-        showToast("프로필 웹 링크가 복사되었습니다! 🔗", "🔗");
+        await copyText(url);
+        showNeoToast("프로필 웹 링크가 복사되었습니다! 🔗");
       }
     } catch {
-      copyToClipboardFallback(url);
-      showToast("프로필 웹 링크가 복사되었습니다! 🔗", "🔗");
+      await copyText(url);
+      showNeoToast("프로필 웹 링크가 복사되었습니다! 🔗");
     }
   });
 }
 
-// ----------------------------------------------------
-// 7. 마우스 추적 조명 효과 (Desktop Spotlight)
-// ----------------------------------------------------
-if (cursorGlow && window.innerWidth > 640) {
-  window.addEventListener("pointermove", (e) => {
-    cursorGlow.style.left = `${e.clientX}px`;
-    cursorGlow.style.top = `${e.clientY}px`;
-  }, { passive: true });
-}
-
-// ----------------------------------------------------
-// 8. 초기 로드 시 첫 번째 바이오 표시
-// ----------------------------------------------------
+// --------------------------------------------------------------------------
+// 8. 초기 상태 세팅
+// --------------------------------------------------------------------------
 updateBio(0);
