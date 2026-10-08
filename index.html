@@ -3,106 +3,320 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>김태우 (VV743) | 개발자 프로필</title>
+  <title>김태우 (VV743) | 개발자 포트폴리오 & 프로필</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Pretendard:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body class="dark-mode">
-  <div class="background-glow glow-1"></div>
-  <div class="background-glow glow-2"></div>
+  <!-- 마우스 추적 조명 효과 (Spotlight) -->
+  <div class="cursor-glow" id="cursor-glow"></div>
 
-  <main class="profile-container">
-    <!-- 테마 토글 버튼 -->
-    <header class="top-nav">
-      <div class="badge status-badge">
-        <span class="status-dot"></span> Available for Projects
-      </div>
-      <button id="theme-toggle" class="icon-button" aria-label="테마 전환" title="다크/라이트 모드 전환">
-        <span class="icon-theme">☀️</span>
-      </button>
-    </header>
+  <!-- 배경 오로라 빛 효과 -->
+  <div class="ambient-glow glow-top-left"></div>
+  <div class="ambient-glow glow-top-right"></div>
+  <div class="ambient-glow glow-bottom-center"></div>
 
-    <!-- 프로필 헤더 -->
-    <section class="profile-header">
-      <div class="avatar-wrapper">
-        <img src="https://avatars.githubusercontent.com/u/188890878?v=4" alt="김태우 프로필 사진" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=VV&background=6366f1&color=fff&size=200'">
-        <span class="verified-badge">✓</span>
-      </div>
-      <h1 class="user-name">김태우 <span class="user-handle">(@VV743)</span></h1>
-      <p class="user-role">Junior Software Developer & Vibe Coder</p>
-    </section>
-
-    <!-- 개발자 소개글 영역 -->
-    <section class="bio-card">
-      <div class="bio-header">
-        <span class="bio-label">💬 DEVELOPER BIO</span>
-        <div class="bio-presets" id="bio-presets">
-          <button class="preset-btn active" data-index="0" title="추천 1: 열정 & 성장형">추천 1</button>
-          <button class="preset-btn" data-index="1" title="추천 2: AI & 실용형">추천 2</button>
-          <button class="preset-btn" data-index="2" title="추천 3: 사용자 & 문제해결형">추천 3</button>
+  <!-- 메인 레이아웃 컨테이너 -->
+  <div class="app-wrapper">
+    <main class="profile-card">
+      
+      <!-- 상단 네비게이션 & 상태 바 -->
+      <header class="card-header">
+        <div class="status-indicator">
+          <span class="pulse-ring"></span>
+          <span class="status-dot"></span>
+          <span class="status-text">Available for Projects & Collaboration</span>
         </div>
-      </div>
-      <p class="bio-text" id="bio-content">
-        <!-- JS로 동적 렌더링 -->
-      </p>
-      <div class="bio-type-tag" id="bio-type-tag">성장 & 열정형</div>
-    </section>
+        
+        <div class="header-controls">
+          <button id="share-btn" class="icon-btn" title="프로필 링크 복사" aria-label="프로필 링크 복사">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </button>
+          <button id="theme-toggle" class="icon-btn" title="다크/라이트 테마 변경" aria-label="테마 전환">
+            <span class="theme-icon">☀️</span>
+          </button>
+        </div>
+      </header>
 
-    <!-- 기술 스택 태그 -->
-    <section class="skills-section">
-      <h2 class="section-title">Tech Stack</h2>
-      <div class="skill-tags">
-        <span class="tag">JavaScript</span>
-        <span class="tag">Python</span>
-        <span class="tag">HTML5 / CSS3</span>
-        <span class="tag">Git & GitHub</span>
-        <span class="tag">AI Vibe Coding</span>
-        <span class="tag">Vite</span>
-      </div>
-    </section>
-
-    <!-- 링크 목록 (MyLink 스타일) -->
-    <section class="links-section">
-      <h2 class="section-title">Links & Contact</h2>
-      <div class="link-list">
-        <a href="https://github.com/VV743" target="_blank" rel="noopener noreferrer" class="link-card">
-          <div class="link-icon">🐙</div>
-          <div class="link-info">
-            <span class="link-title">GitHub Profile</span>
-            <span class="link-desc">github.com/VV743</span>
+      <!-- 프로필 히어로 영역 -->
+      <section class="hero-section">
+        <div class="avatar-container">
+          <div class="avatar-glow-ring"></div>
+          <img src="https://avatars.githubusercontent.com/u/188890878?v=4" alt="김태우 프로필" class="avatar-image" onerror="this.src='https://ui-avatars.com/api/?name=VV&background=6366f1&color=fff&size=200'">
+          <div class="badge-verified" title="인증된 개발자">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
           </div>
-          <span class="arrow">→</span>
-        </a>
+        </div>
 
-        <a href="https://github.com/VV743/vv" target="_blank" rel="noopener noreferrer" class="link-card">
-          <div class="link-icon">📦</div>
-          <div class="link-info">
-            <span class="link-title">vv Project Repository</span>
-            <span class="link-desc">프로젝트 소스 코드 저장소</span>
+        <div class="hero-info">
+          <h1 class="profile-name">
+            김태우 <span class="gradient-text">(@VV743)</span>
+          </h1>
+          <p class="profile-title">
+            <span class="role-highlight">Junior Software Developer</span> &amp; <span class="vibe-badge">✦ AI Vibe Coder</span>
+          </p>
+          <div class="quick-meta-tags">
+            <span class="meta-tag">📍 South Korea</span>
+            <span class="meta-tag">⚡ Fast Learner</span>
+            <span class="meta-tag">💡 Problem Solver</span>
           </div>
-          <span class="arrow">→</span>
-        </a>
+        </div>
+      </section>
 
-        <button class="link-card action-card" id="copy-email-btn" data-email="188890878+VV743@users.noreply.github.com">
-          <div class="link-icon">✉️</div>
-          <div class="link-info">
-            <span class="link-title">Email Contact</span>
-            <span class="link-desc" id="email-text">이메일 주소 복사하기</span>
+      <!-- 개발자 소개 & 바이오 탭 -->
+      <section class="section-card bio-box">
+        <div class="section-top-row">
+          <div class="section-title-wrap">
+            <span class="section-icon">💬</span>
+            <h2 class="section-title">Developer Bio</h2>
           </div>
-          <span class="arrow" id="email-arrow">📋</span>
-        </button>
-      </div>
-    </section>
+          <div class="bio-tabs" id="bio-tabs">
+            <button class="tab-btn active" data-index="0">성장 & 열정</button>
+            <button class="tab-btn" data-index="1">AI & 실용</button>
+            <button class="tab-btn" data-index="2">문제 해결</button>
+          </div>
+        </div>
 
-    <!-- 푸터 -->
-    <footer class="footer">
-      <p>© 2026 김태우 (VV743). Built with Antigravity & Vibe Coding.</p>
-    </footer>
-  </main>
+        <div class="bio-body">
+          <div class="quote-mark">“</div>
+          <p class="bio-paragraph" id="bio-content">
+            <!-- JS 동적 로딩 -->
+          </p>
+          <div class="bio-footer">
+            <span class="bio-category-chip" id="bio-category">성장 &amp; 열정형</span>
+            <button id="copy-bio-btn" class="mini-text-btn" title="소개글 복사">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              텍스트 복사
+            </button>
+          </div>
+        </div>
+      </section>
 
-  <div id="toast" class="toast">클립보드에 복사되었습니다!</div>
+      <!-- 추천 프로젝트 영역 (Projects Showcase) -->
+      <section class="section-card projects-box">
+        <div class="section-top-row">
+          <div class="section-title-wrap">
+            <span class="section-icon">🚀</span>
+            <h2 class="section-title">Featured Projects</h2>
+          </div>
+          <span class="counter-badge">2 Repos</span>
+        </div>
+
+        <div class="projects-grid">
+          <!-- 프로젝트 1: vv -->
+          <a href="https://github.com/VV743/vv" target="_blank" rel="noopener noreferrer" class="project-item">
+            <div class="project-main">
+              <div class="project-header">
+                <span class="project-icon">💎</span>
+                <span class="project-name">VV Profile &amp; Hub</span>
+                <span class="live-tag">Active</span>
+              </div>
+              <p class="project-desc">
+                모던 웹 기술(Vite, CSS Glassmorphism)과 AI 바이브 코딩으로 제작된 반응형 포트폴리오 웹애플리케이션
+              </p>
+            </div>
+            <div class="project-meta">
+              <div class="tech-pills">
+                <span class="pill">Vite</span>
+                <span class="pill">JavaScript</span>
+                <span class="pill">CSS3</span>
+              </div>
+              <span class="external-link-arrow">↗</span>
+            </div>
+          </a>
+
+          <!-- 프로젝트 2: my-ai -->
+          <div class="project-item ai-project">
+            <div class="project-main">
+              <div class="project-header">
+                <span class="project-icon">🤖</span>
+                <span class="project-name">AI Vibe Coding Lab</span>
+                <span class="live-tag lab-tag">Research</span>
+              </div>
+              <p class="project-desc">
+                최신 AI 코딩 어시스턴트(Antigravity)와 함께하는 고속 아이디어 프로토타이핑 및 소프트웨어 연구소
+              </p>
+            </div>
+            <div class="project-meta">
+              <div class="tech-pills">
+                <span class="pill">AI Assistant</span>
+                <span class="pill">Python</span>
+                <span class="pill">Automation</span>
+              </div>
+              <span class="sparkle-icon">✨</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 기술 스택 영역 (Tech Stack) -->
+      <section class="section-card skills-box">
+        <div class="section-top-row">
+          <div class="section-title-wrap">
+            <span class="section-icon">🛠️</span>
+            <h2 class="section-title">Tech Stack &amp; Tools</h2>
+          </div>
+          <div class="stack-filter-chips">
+            <button class="filter-chip active" data-filter="all">전체</button>
+            <button class="filter-chip" data-filter="code">언어/웹</button>
+            <button class="filter-chip" data-filter="tool">도구/AI</button>
+          </div>
+        </div>
+
+        <div class="skills-grid" id="skills-grid">
+          <div class="skill-item" data-category="code">
+            <span class="skill-emoji">💛</span>
+            <div class="skill-detail">
+              <span class="skill-name">JavaScript</span>
+              <span class="skill-sub">ES6+, DOM, Async</span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-category="code">
+            <span class="skill-emoji">🐍</span>
+            <div class="skill-detail">
+              <span class="skill-name">Python</span>
+              <span class="skill-sub">Data & Automation</span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-category="code">
+            <span class="skill-emoji">🎨</span>
+            <div class="skill-detail">
+              <span class="skill-name">HTML5 &amp; CSS3</span>
+              <span class="skill-sub">Responsive, UI/UX</span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-category="code">
+            <span class="skill-emoji">⚡</span>
+            <div class="skill-detail">
+              <span class="skill-name">Vite</span>
+              <span class="skill-sub">Fast Frontend Build</span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-category="tool">
+            <span class="skill-emoji">🐙</span>
+            <div class="skill-detail">
+              <span class="skill-name">Git &amp; GitHub</span>
+              <span class="skill-sub">Version Control</span>
+            </div>
+          </div>
+
+          <div class="skill-item" data-category="tool">
+            <span class="skill-emoji">🔮</span>
+            <div class="skill-detail">
+              <span class="skill-name">AI Vibe Coding</span>
+              <span class="skill-sub">Antigravity / LLM</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 응원하기 & 인터랙티브 위젯 (Interactive Cheer & Stats) -->
+      <section class="section-card cheer-box">
+        <div class="cheer-content">
+          <div class="cheer-text-wrap">
+            <h3 class="cheer-title">👏 개발자에게 응원 보내기</h3>
+            <p class="cheer-desc">버튼을 눌러 응원의 마음을 전해보세요! (실시간 카운트)</p>
+          </div>
+          <button id="cheer-btn" class="cheer-button">
+            <span class="cheer-icon" id="cheer-icon">❤️</span>
+            <span class="cheer-count" id="cheer-count">0</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 링크 및 연락처 (Links & Contact) -->
+      <section class="section-card contact-box">
+        <div class="section-top-row">
+          <div class="section-title-wrap">
+            <span class="section-icon">🔗</span>
+            <h2 class="section-title">Connect &amp; Contact</h2>
+          </div>
+        </div>
+
+        <div class="contact-links-grid">
+          <!-- GitHub Profile -->
+          <a href="https://github.com/VV743" target="_blank" rel="noopener noreferrer" class="contact-card">
+            <div class="contact-card-icon github-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </div>
+            <div class="contact-card-info">
+              <span class="contact-name">GitHub 프로필</span>
+              <span class="contact-desc">github.com/VV743</span>
+            </div>
+            <span class="contact-arrow">↗</span>
+          </a>
+
+          <!-- GitHub Repo -->
+          <a href="https://github.com/VV743/vv" target="_blank" rel="noopener noreferrer" class="contact-card">
+            <div class="contact-card-icon repo-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+            </div>
+            <div class="contact-card-info">
+              <span class="contact-name">vv 저장소 둘러보기</span>
+              <span class="contact-desc">프로젝트 소스 코드 &amp; 커밋</span>
+            </div>
+            <span class="contact-arrow">↗</span>
+          </a>
+
+          <!-- Email Copy -->
+          <button id="copy-email-btn" class="contact-card action-card-btn" data-email="188890878+VV743@users.noreply.github.com">
+            <div class="contact-card-icon email-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div class="contact-card-info">
+              <span class="contact-name">이메일 문의</span>
+              <span class="contact-desc" id="email-label-text">클릭하여 이메일 주소 복사</span>
+            </div>
+            <span class="contact-arrow copy-icon-symbol">📋</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 푸터 -->
+      <footer class="card-footer">
+        <p class="copyright">
+          © 2026 <strong>김태우 (VV743)</strong>. Crafted with Precision &amp; Vibe Coding.
+        </p>
+        <div class="footer-badges">
+          <span class="badge-mini">⚡ Vite</span>
+          <span class="badge-mini">🚀 Antigravity</span>
+          <span class="badge-mini">🟢 Online</span>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- 토스트 알림 메시지 팝업 -->
+  <div id="toast" class="toast-popup" role="status" aria-live="polite">
+    <span class="toast-icon">✨</span>
+    <span class="toast-message" id="toast-text">복사되었습니다!</span>
+  </div>
 
   <script src="main.js"></script>
 </body>
