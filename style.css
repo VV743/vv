@@ -1,6 +1,7 @@
 /* ==========================================================================
    NEOBRUTALISM DESIGN SYSTEM - 김태우 (VV743) 개발자 프로필
    Thick borders, hard drop-shadows, punchy colors, tactile micro-interactions
+   Fully optimized for all viewports including Mobile S (320px)
    ========================================================================== */
 
 :root {
@@ -30,7 +31,6 @@
   --shadow-large: 8px 8px 0px var(--shadow-color);
   --shadow-hover: 7px 7px 0px var(--shadow-color);
   --shadow-pressed: 2px 2px 0px var(--shadow-color);
-  --radius-sharp: 0px;
   --radius-card: 14px;
   --radius-pill: 999px;
   --radius-sm: 8px;
@@ -57,7 +57,7 @@ body.dark-mode {
 }
 
 /* ---------------- 리셋 & 전역 베이스 ---------------- */
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -65,10 +65,11 @@ body.dark-mode {
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: 'Pretendard', 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
   background-color: var(--bg-color);
   background-image: radial-gradient(var(--bg-dots) 1.5px, transparent 1.5px);
   background-size: 22px 22px;
@@ -79,11 +80,12 @@ body {
   align-items: center;
   position: relative;
   overflow-x: hidden;
+  width: 100%;
   padding-bottom: 60px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ---------------- 마키 티커 테이프 (Marquee Ticker Tape) ---------------- */
+/* ---------------- 마키 티커 테이프 ---------------- */
 .marquee-ticker {
   width: 100%;
   background: var(--color-yellow);
@@ -111,7 +113,7 @@ body {
   to { transform: translateX(-50%); }
 }
 
-/* ---------------- 전체 컨테이너 ---------------- */
+/* ---------------- 메인 컨테이너 ---------------- */
 .app-container {
   width: 100%;
   max-width: 720px;
@@ -126,7 +128,7 @@ body {
   border: var(--border-thick) solid var(--border-color);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-large);
-  padding: 30px 26px;
+  padding: 30px 24px;
   display: flex;
   flex-direction: column;
   gap: 26px;
@@ -144,13 +146,14 @@ body {
   }
 }
 
-/* ---------------- 네오브루탈 헤더 & 컨트롤 ---------------- */
+/* ---------------- 헤더 & 컨트롤 ---------------- */
 .neo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .status-sticker {
@@ -166,6 +169,7 @@ body {
   font-family: 'Space Mono', monospace;
   font-weight: 700;
   box-shadow: 3px 3px 0px var(--shadow-color);
+  max-width: 100%;
 }
 
 .blinking-dot {
@@ -174,6 +178,7 @@ body {
   border-radius: 50%;
   background: #16a34a;
   border: 2px solid #000000;
+  flex-shrink: 0;
   animation: blink 1.5s infinite;
 }
 
@@ -187,7 +192,7 @@ body {
   gap: 8px;
 }
 
-/* ---------------- 버튼 공통 (Tactile Neo-Buttons) ---------------- */
+/* ---------------- 촉각적 네오 버튼 (Neo-Buttons) ---------------- */
 .neo-btn {
   display: inline-flex;
   align-items: center;
@@ -205,6 +210,8 @@ body {
   box-shadow: 3px 3px 0px var(--shadow-color);
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
+  touch-action: manipulation;
+  text-decoration: none;
 }
 
 .neo-btn:hover {
@@ -225,7 +232,7 @@ body {
 }
 
 .micro-btn {
-  padding: 4px 10px;
+  padding: 5px 10px;
   font-size: 0.74rem;
 }
 
@@ -240,6 +247,7 @@ body {
   border-radius: var(--radius-card);
   padding: 22px 24px;
   box-shadow: var(--shadow-offset);
+  width: 100%;
 }
 
 .avatar-box {
@@ -272,12 +280,15 @@ body {
   padding: 2px 6px;
   box-shadow: 2px 2px 0px #000000;
   transform: rotate(-3deg);
+  white-space: nowrap;
 }
 
 .hero-text-block {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .headline-tag {
@@ -285,7 +296,7 @@ body {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .hero-name {
@@ -296,6 +307,7 @@ body {
   align-items: baseline;
   gap: 10px;
   flex-wrap: wrap;
+  word-break: keep-all;
 }
 
 .highlight-handle {
@@ -303,9 +315,10 @@ body {
   color: var(--color-yellow);
   padding: 2px 8px;
   border-radius: 4px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-family: 'Space Mono', monospace;
   font-weight: 700;
+  word-break: break-all;
 }
 
 .hero-subline {
@@ -330,6 +343,7 @@ body {
   font-size: 0.78rem;
   font-weight: 700;
   box-shadow: 2px 2px 0px #000000;
+  white-space: nowrap;
 }
 
 .hero-stickers {
@@ -348,19 +362,21 @@ body {
   border: 2px solid #000000;
   box-shadow: 2px 2px 0px #000000;
   color: #000000;
+  white-space: nowrap;
 }
 
 .tag-yellow { background: var(--color-white); }
 .tag-cyan { background: var(--color-cyan); }
 .tag-pink { background: var(--color-pink); }
 
-/* ---------------- 윈도우 스타일 카드 공통 (Window Cards) ---------------- */
+/* ---------------- 윈도우 스타일 카드 공통 ---------------- */
 .neo-card {
   background: var(--board-bg);
   border: var(--border-thick) solid var(--border-color);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-offset);
   overflow: hidden;
+  width: 100%;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -378,6 +394,7 @@ body {
   color: #000000;
   flex-wrap: wrap;
   gap: 8px;
+  width: 100%;
 }
 
 .bg-mint { background: var(--color-mint); }
@@ -397,6 +414,7 @@ body {
   border-radius: 50%;
   border: 2px solid #000000;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .window-dot:nth-child(1) { background: #ef4444; }
@@ -415,6 +433,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
 }
 
 /* ---------------- 바이오 영역 (Bio Window) ---------------- */
@@ -431,10 +450,12 @@ body {
   font-family: 'Pretendard', sans-serif;
   font-size: 0.74rem;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 5px 8px;
   cursor: pointer;
   box-shadow: 2px 2px 0px #000000;
   transition: all 0.15s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .neo-tab:hover {
@@ -455,6 +476,7 @@ body {
   padding: 16px 18px;
   position: relative;
   box-shadow: 3px 3px 0px var(--shadow-color);
+  width: 100%;
 }
 
 .bio-quote-text {
@@ -462,6 +484,8 @@ body {
   line-height: 1.65;
   color: var(--text-main);
   min-height: 52px;
+  word-break: keep-all;
+  overflow-wrap: break-word;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -470,6 +494,9 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-top: 4px;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .sticker-chip {
@@ -499,6 +526,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .project-box {
@@ -513,15 +541,11 @@ body {
   box-shadow: 4px 4px 0px var(--shadow-color);
   transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  width: 100%;
 }
 
-.box-cyan {
-  background: var(--color-cyan);
-}
-
-.box-purple {
-  background: var(--color-purple);
-}
+.box-cyan { background: var(--color-cyan); }
+.box-purple { background: var(--color-purple); }
 
 .project-box:hover {
   transform: translate(-3px, -3px);
@@ -532,6 +556,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
 
 .proj-badge {
@@ -544,6 +569,7 @@ body {
   padding: 2px 8px;
   border-radius: 6px;
   box-shadow: 2px 2px 0px #000000;
+  white-space: nowrap;
 }
 
 .proj-arrow, .proj-sparkle {
@@ -552,9 +578,10 @@ body {
 }
 
 .proj-title {
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: -0.3px;
+  word-break: keep-all;
 }
 
 .proj-desc {
@@ -562,6 +589,7 @@ body {
   line-height: 1.5;
   color: #1e293b;
   font-weight: 500;
+  word-break: keep-all;
 }
 
 .proj-tags {
@@ -595,10 +623,12 @@ body {
   font-family: 'Space Mono', monospace;
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 3px 8px;
+  padding: 4px 8px;
   cursor: pointer;
   box-shadow: 2px 2px 0px #000000;
   transition: all 0.15s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .filter-tab.active {
@@ -612,6 +642,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 12px;
+  width: 100%;
 }
 
 .skill-brick {
@@ -624,6 +655,7 @@ body {
   box-shadow: 3px 3px 0px var(--shadow-color);
   color: #000000;
   transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 0;
 }
 
 .tile-yellow { background: var(--color-yellow); }
@@ -644,16 +676,21 @@ body {
 
 .skill-ico {
   font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 .skill-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .skill-heading {
   font-size: 0.92rem;
   font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .skill-detail {
@@ -666,15 +703,22 @@ body {
 .cheer-window {
   background: var(--color-orange);
   color: #000000;
+  width: 100%;
 }
 
 .cheer-inner-box {
-  padding: 20px 22px;
+  padding: 18px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.cheer-message {
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .cheer-title-row {
@@ -685,30 +729,33 @@ body {
 
 .cheer-emoji {
   font-size: 1.3rem;
+  flex-shrink: 0;
 }
 
 .cheer-main-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 900;
   letter-spacing: -0.3px;
 }
 
 .cheer-sub {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  margin-top: 4px;
+  margin-top: 3px;
   opacity: 0.9;
+  word-break: keep-all;
 }
 
 .cheer-action-btn {
   background: var(--color-pink);
   color: #000000;
-  font-size: 0.92rem;
-  padding: 10px 18px;
+  font-size: 0.9rem;
+  padding: 10px 16px;
   border-radius: var(--radius-sm);
   box-shadow: 4px 4px 0px #000000;
   border: var(--border-thick) solid #000000;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .cheer-action-btn:hover {
@@ -736,6 +783,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
 .contact-row {
@@ -751,6 +799,16 @@ body {
   transition: all 0.18s ease;
   cursor: pointer;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* button 태그 기본 스타일 초기화 */
+button.contact-row {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: inherit;
+  text-align: left;
 }
 
 .row-yellow { background: var(--color-yellow); }
@@ -766,10 +824,13 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .contact-icon {
   font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 .contact-texts {
@@ -777,17 +838,29 @@ body {
   flex-direction: column;
   gap: 2px;
   text-align: left;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .contact-title {
   font-size: 0.95rem;
   font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* ★ URL 줄바꿈 및 오버플로우 방지 핵심 스타일 */
 .contact-url {
   font-size: 0.78rem;
   font-family: 'Space Mono', monospace;
-  opacity: 0.85;
+  opacity: 0.88;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  line-height: 1.35;
+  min-width: 0;
 }
 
 .contact-action-badge {
@@ -800,6 +873,9 @@ body {
   border-radius: 6px;
   border: 2px solid #000000;
   box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* ---------------- 푸터 ---------------- */
@@ -811,17 +887,22 @@ body {
   text-align: center;
   padding-top: 14px;
   border-top: var(--border-width) dashed var(--border-color);
+  width: 100%;
 }
 
 .footer-text {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-family: 'Space Mono', monospace;
   font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
 }
 
 .footer-tags {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .footer-chip {
@@ -841,15 +922,15 @@ body {
   position: fixed;
   bottom: 24px;
   left: 50%;
-  transform: translateX(-50%) translateY(50px);
+  transform: translateX(-50%) translateY(60px);
   background: var(--color-yellow);
   color: #000000;
   border: var(--border-thick) solid #000000;
   border-radius: var(--radius-sm);
-  padding: 10px 20px;
+  padding: 10px 18px;
   box-shadow: 5px 5px 0px #000000;
   font-family: 'Space Mono', 'Pretendard', monospace;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
@@ -857,6 +938,8 @@ body {
   opacity: 0;
   pointer-events: none;
   z-index: 1000;
+  max-width: 90vw;
+  box-sizing: border-box;
   transition: all 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
@@ -866,6 +949,11 @@ body {
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.toast-msg {
+  word-break: break-all;
 }
 
 .neo-toast.show {
@@ -873,21 +961,26 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ---------------- 반응형 디자인 ---------------- */
+/* ==========================================================================
+   반응형 미디어 쿼리 (태블릿 / 모바일 / 모바일 S 완벽 대응)
+   ========================================================================== */
+
+/* 태블릿 & 모바일 공통 (<= 640px) */
 @media (max-width: 640px) {
   .app-container {
-    padding: 16px 10px;
+    padding: 16px 12px;
   }
 
   .neo-board {
-    padding: 20px 14px;
-    gap: 18px;
+    padding: 20px 16px;
+    gap: 20px;
   }
 
   .neo-hero {
     flex-direction: column;
     text-align: center;
-    padding: 18px 14px;
+    padding: 20px 16px;
+    gap: 16px;
   }
 
   .hero-name {
@@ -903,18 +996,247 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .cheer-inner-box {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
+  /* 링크 & 연락처 행: 세로 스택 & 하단 버튼형 배지 */
   .contact-row {
     flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .contact-left {
+    width: 100%;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
   }
 
   .contact-action-badge {
-    align-self: flex-end;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+}
+
+/* 모바일 표준 (<= 480px) */
+@media (max-width: 480px) {
+  .neo-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .status-sticker {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    box-sizing: border-box;
+  }
+
+  .header-buttons {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .header-buttons .neo-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  /* 윈도우 타이틀 바 & 탭 버튼 균등 분할 */
+  .card-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .card-bar-left {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .bio-tabs-list {
+    width: 100%;
+    display: flex;
+    gap: 4px;
+  }
+
+  .neo-tab {
+    flex: 1 1 0;
+    text-align: center;
+    padding: 6px 2px;
+    font-size: 0.7rem;
+    min-width: 0;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  .filter-group {
+    width: 100%;
+    display: flex;
+    gap: 4px;
+  }
+
+  .filter-tab {
+    flex: 1 1 0;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 0.7rem;
+    box-sizing: border-box;
+  }
+
+  /* 응원하기 박스 */
+  .cheer-inner-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 14px;
+  }
+
+  .cheer-action-btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  /* 바이오 하단 액션 */
+  .bio-action-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .sticker-chip {
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .bio-action-row .neo-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ★ 모바일 S (Mobile S: <= 360px 및 320px) 초소형 화면 정밀 보정 */
+@media (max-width: 360px) {
+  body {
+    padding-bottom: 40px;
+  }
+
+  .marquee-ticker {
+    font-size: 0.78rem;
+    padding: 6px 0;
+  }
+
+  .app-container {
+    padding: 8px 6px;
+  }
+
+  .neo-board {
+    padding: 16px 10px;
+    border-width: 3px;
+    box-shadow: 4px 4px 0px var(--shadow-color);
+    gap: 16px;
+    border-radius: 10px;
+  }
+
+  .card-body {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+
+  /* 히어로 섹션 */
+  .neo-hero {
+    padding: 14px 10px;
+    gap: 12px;
+    border-width: 3px;
+    box-shadow: 3px 3px 0px var(--shadow-color);
+  }
+
+  .neo-avatar {
+    width: 80px;
+    height: 80px;
+    border-width: 3px;
+  }
+
+  .hero-name {
+    font-size: 1.35rem;
+  }
+
+  .highlight-handle {
+    font-size: 0.9rem;
+    padding: 2px 6px;
+  }
+
+  .badge-role {
+    font-size: 0.85rem;
+  }
+
+  .badge-vibe {
+    font-size: 0.72rem;
+  }
+
+  .mini-sticker {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  /* 탭 폰트 */
+  .neo-tab {
+    font-size: 0.65rem;
+    padding: 5px 2px;
+    letter-spacing: -0.5px;
+  }
+
+  .card-title {
+    font-size: 0.78rem;
+  }
+
+  /* 프로젝트 카드 */
+  .project-box {
+    padding: 12px 10px;
+    border-width: 2.5px;
+  }
+
+  .proj-title {
+    font-size: 0.92rem;
+  }
+
+  .proj-desc {
+    font-size: 0.8rem;
+  }
+
+  .tag-label {
+    font-size: 0.62rem;
+    padding: 2px 4px;
+  }
+
+  /* 연락처 카드 & 초소형 화면 URL */
+  .contact-row {
+    padding: 10px 10px;
+    border-width: 2.5px;
+  }
+
+  .contact-title {
+    font-size: 0.88rem;
+  }
+
+  .contact-url {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  .contact-action-badge {
+    padding: 5px 8px;
+    font-size: 0.72rem;
   }
 }
