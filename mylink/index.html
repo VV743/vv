@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마이링크(MyLink) — 라이브 스트리밍 플랫폼</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #e60012;
+      --dark: #1a1a2e;
+      --card-bg: #16213e;
+      --accent: #0f3460;
+      --gold: #e94560;
+      --text: #eaeaea;
+      --muted: #888;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 56px;
+      background: #0d0d1a;
+      border-bottom: 2px solid var(--red);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--red); }
+    .nav-search {
+      flex: 1;
+      max-width: 400px;
+      margin: 0 32px;
+      display: flex;
+      align-items: center;
+      background: #1e1e36;
+      border: 1px solid #333;
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 0 14px;
+      gap: 8px;
+    }
+    .nav-search input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 14px;
+      padding: 8px 0;
+    }
+    .nav-search input::placeholder { color: var(--muted); }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      padding: 7px 18px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #555;
+      color: var(--text);
+    }
+    .btn-primary { background: var(--red); color: #fff; }
+
+    /* ── CATEGORY TABS ── */
+    .category-bar {
+      display: flex;
+      gap: 4px;
+      padding: 14px 32px;
+      background: #111128;
+      border-bottom: 1px solid #222;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .category-bar::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      background: #1e1e36;
+      color: var(--muted);
+      border: 1px solid #2a2a4a;
+      transition: all 0.15s;
+    }
+    .cat-tab:hover { color: #fff; border-color: #555; }
+    .cat-tab.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+    /* ── MAIN ── */
+    main { padding: 24px 32px 48px; }
+
+    .live-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .live-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulse 1.4s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+    .live-status strong { color: var(--red); font-size: 16px; }
+
+    /* ── GRID ── */
+    .stream-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .stream-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: 1px solid #1e2a4a;
+    }
+    .stream-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(230, 0, 18, 0.18);
+    }
+
+    .thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #1a1a3e 0%, #0f1f4a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .live-badge {
+      position: absolute;
+      top: 8px; left: 8px;
+      background: var(--red);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+    .viewer-badge {
+      position: absolute;
+      bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-info { padding: 12px 14px 14px; }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .card-cat {
+      background: var(--accent);
+      color: #aac4ff;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+      color: var(--muted);
+      gap: 12px;
+    }
+    .empty-state .icon { font-size: 48px; }
+    .empty-state p { font-size: 15px; }
+
+    /* ── LOAD MORE ── */
+    .load-more-wrap {
+      text-align: center;
+      margin-top: 36px;
+    }
+    .btn-load {
+      padding: 12px 40px;
+      background: #1e1e36;
+      border: 1px solid #333;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-load:hover { background: #2a2a4a; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid #1e1e36;
+    }
+    footer a { color: #555; text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .nav-search { margin: 0 12px; }
+      main { padding: 16px 16px 40px; }
+      .category-bar { padding: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">마이<span>링크</span></div>
+  <div class="nav-search">
+    <span>🔍</span>
+    <input type="text" placeholder="채널, 스트리머 검색..." />
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-outline">로그인</button>
+    <button class="btn btn-primary">회원가입</button>
+  </div>
+</nav>
+
+<!-- CATEGORY TABS -->
+<div class="category-bar" id="categoryBar">
+  <div class="cat-tab active" data-cat="전체">전체</div>
+  <div class="cat-tab" data-cat="게임">🎮 게임</div>
+  <div class="cat-tab" data-cat="음악">🎵 음악</div>
+  <div class="cat-tab" data-cat="토크·일상">💬 토크·일상</div>
+  <div class="cat-tab" data-cat="스포츠">⚽ 스포츠</div>
+  <div class="cat-tab" data-cat="교육">📚 교육</div>
+  <div class="cat-tab" data-cat="기타">🎲 기타</div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div class="live-status">
+    <div class="live-dot"></div>
+    <strong id="liveCount">8</strong>&nbsp;개 방송 중
+  </div>
+
+  <div class="stream-grid" id="streamGrid"></div>
+  <div class="empty-state" id="emptyState">
+    <div class="icon">📡</div>
+    <p>현재 라이브 방송이 없습니다.</p>
+  </div>
+
+  <div class="load-more-wrap">
+    <button class="btn-load">더 보기 ↓</button>
+  </div>
+</main>
+
+<footer>
+  © 2026 마이링크(MyLink) &nbsp;|&nbsp;
+  <a href="#">이용약관</a>
+  <a href="#">개인정보처리방침</a>
+  <a href="#">문의하기</a>
+</footer>
+
+<script>
+  const STREAMS = [
+    { emoji:'🎮', title:'오늘도 열심히 코딩 중...', streamer:'@streamer01', cat:'게임',    viewers:12430 },
+    { emoji:'🎮', title:'새벽 롤 랭겜 다이아 도전',  streamer:'@night_roll',  cat:'게임',    viewers:8201  },
+    { emoji:'🎵', title:'쇼팽 즉흥곡 피아노 연주',   streamer:'@piano_j',     cat:'음악',    viewers:4100  },
+    { emoji:'⚽', title:'주말 풋살 중계 vs 강남FC',  streamer:'@fc_live',     cat:'스포츠',  viewers:2380  },
+    { emoji:'💬', title:'일상 브이로그 같이 봐요',   streamer:'@daily_vlog',  cat:'토크·일상',viewers:1990 },
+    { emoji:'🎸', title:'기타 연습 버스킹 준비 중',  streamer:'@guitar_k',    cat:'음악',    viewers:1340  },
+    { emoji:'📚', title:'영어회화 스터디 같이해요',   streamer:'@eng_study',   cat:'교육',    viewers:980   },
+    { emoji:'🍜', title:'먹방 라이브 오늘은 짬뽕',   streamer:'@mukbang1',    cat:'기타',    viewers:440   },
+  ];
+
+  let currentCat = '전체';
+
+  function formatViewers(n) {
+    return n >= 1000 ? (n/1000).toFixed(1)+'K' : n.toString();
+  }
+
+  function renderGrid(cat) {
+    const grid = document.getElementById('streamGrid');
+    const empty = document.getElementById('emptyState');
+    const liveCount = document.getElementById('liveCount');
+
+    const filtered = cat === '전체' ? STREAMS : STREAMS.filter(s => s.cat === cat);
+
+    if (filtered.length === 0) {
+      grid.style.display = 'none';
+      empty.style.display = 'flex';
+      liveCount.textContent = '0';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    empty.style.display = 'none';
+    liveCount.textContent = filtered.length;
+
+    grid.innerHTML = filtered.map(s => `
+      <div class="stream-card">
+        <div class="thumb">
+          <span>${s.emoji}</span>
+          <div class="live-badge">🔴 LIVE</div>
+          <div class="viewer-badge">👁 ${formatViewers(s.viewers)}</div>
+        </div>
+        <div class="card-info">
+          <div class="card-title">${s.title}</div>
+          <div class="card-meta">
+            <span class="card-cat">${s.cat}</span>
+            <span>${s.streamer}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 카테고리 탭 이벤트
+  document.getElementById('categoryBar').addEventListener('click', e => {
+    const tab = e.target.closest('.cat-tab');
+    if (!tab) return;
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentCat = tab.dataset.cat;
+    renderGrid(currentCat);
+  });
+
+  renderGrid('전체');
+</script>
+</body>
+</html>
