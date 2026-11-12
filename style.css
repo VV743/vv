@@ -1486,3 +1486,195 @@ button.rail-button {
     gap: 8px;
   }
 }
+
+/* ==========================================================================
+   SCR-07/08: 프로필 편집 버튼 & 모달 (Profile Edit Badge & Modal)
+   ========================================================================== */
+
+/* 아바타 위 편집 뱃지 버튼 */
+.profile-edit-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  color: #fff;
+  font-size: 11px;
+  font-family: 'Silkscreen', monospace;
+  border: 2px solid var(--color-carbon);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 0 #000;
+  transition: transform 0.12s, background 0.12s;
+  z-index: 10;
+}
+.profile-edit-badge:hover {
+  background: var(--color-primary);
+  transform: scale(1.15);
+}
+
+/* 모달 오버레이 */
+.profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 40, 0.82);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.profile-modal-overlay[hidden] {
+  display: none;
+}
+.profile-modal-overlay.is-open {
+  opacity: 1;
+}
+
+/* 모달 박스 */
+.profile-modal-box {
+  background: var(--color-canvas);
+  border: 3px solid var(--color-carbon);
+  box-shadow: 4px 4px 0 #000, inset 0 1px 0 rgba(255,255,255,0.18);
+  border-radius: 4px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 모달 헤더 */
+.profile-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--color-carbon);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.profile-modal-header .section-title {
+  flex: 1;
+  font-size: 11px;
+  margin: 0;
+}
+.profile-modal-close {
+  background: var(--color-primary);
+  color: #fff;
+  border: 2px solid var(--color-carbon);
+  font-family: 'Silkscreen', monospace;
+  font-size: 11px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0 #000;
+  transition: background 0.1s;
+}
+.profile-modal-close:hover {
+  background: #b00010;
+}
+
+/* 모달 바디 */
+.profile-modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 아바타 미리보기 */
+.profile-avatar-preview-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.modal-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid var(--color-carbon);
+  object-fit: cover;
+  box-shadow: 2px 2px 0 #000;
+  background: var(--color-platinum);
+}
+.avatar-preview-label {
+  font-family: 'Silkscreen', monospace;
+  font-size: 8px;
+  color: var(--color-carbon);
+  letter-spacing: 0.06em;
+}
+
+/* 필드 그룹 */
+.profile-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.profile-field-label {
+  font-family: 'Silkscreen', monospace;
+  font-size: 9px;
+  color: var(--color-carbon);
+  letter-spacing: 0.07em;
+  font-weight: bold;
+}
+.profile-text-input,
+.profile-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Silkscreen', monospace;
+  font-size: 11px;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 2px solid var(--color-carbon);
+  padding: 7px 9px;
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.12);
+  outline: none;
+  resize: vertical;
+}
+.profile-text-input:focus,
+.profile-textarea:focus {
+  border-color: var(--color-signal);
+  box-shadow: 0 0 0 2px rgba(246,141,31,0.25), inset 1px 1px 0 rgba(0,0,0,0.1);
+}
+.profile-field-hint {
+  font-family: 'Silkscreen', monospace;
+  font-size: 8px;
+  color: var(--color-muted-indigo);
+}
+
+/* 액션 버튼 바 */
+.profile-action-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* 모바일 대응 */
+@media (max-width: 500px) {
+  .profile-modal-box {
+    max-width: 100%;
+    border-radius: 2px;
+  }
+  .profile-action-bar {
+    flex-direction: column;
+  }
+  .profile-action-bar button {
+    width: 100%;
+  }
+}

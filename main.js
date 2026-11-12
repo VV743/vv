@@ -262,3 +262,196 @@ if (themeRetroToggle) {
 
 // 초기 로딩
 switchBio(0);
+
+// --------------------------------------------------------------------------
+// 8. 프로필 편집 (SCR-07/08: localStorage 기반 프로필 관리)
+// --------------------------------------------------------------------------
+const PROFILE_STORAGE_KEY = "mylink-profile";
+
+const DEFAULT_PROFILE = {
+  nickname: "김태우",
+  bio: "💡 기술로 아이디어를 실물 소프트웨어로 구현하는 것에 진심인 개발자 김태우입니다.",
+  avatarUrl: "https://avatars.githubusercontent.com/u/188890878?v=4",
+  siteName: "VV743.com",
+};
+
+// --- localStorage 헬퍼 ---
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
+    return raw ? { ...DEFAULT_PROFILE, ...JSON.parse(raw) } : { ...DEFAULT_PROFILE };
+  } catch {
+    return { ...DEFAULT_PROFILE };
+  }
+}
+
+function saveProfile(data) {
+  localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(data));
+}
+
+// --- DOM에 프로필 반영 ---
+function applyProfileToDOM(profile) {
+  // 말풍선 닉네임
+  const nicknameEl = document.getElementById("profile-nickname");
+  if (nicknameEl) nicknameEl.textContent = profile.nickname;
+
+  // 말풍선 사이트명
+  const siteNameEl = document.getElementById("profile-site-name");
+  if (siteNameEl) siteNameEl.textContent = profile.siteName;
+
+  // 아바타 이미지
+  const avatarImg = document.getElementById("profile-avatar-img");
+  if (avatarImg && profile.avatarUrl) {
+    avatarImg.src = profile.avatarUrl;
+    avatarImg.onerror = () => {
+      avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.nickname)}&background=e60012&color=fff&size=100&bold=true`;
+    };
+  }
+
+  // 히어로 섹션 설명 텍스트 (첫 번째 바이오 탭에 반영)
+  const heroBioText = document.getElementById("bio-display-text");
+  if (heroBioText && profile.bio) {
+    bioStatements[0] = { ...bioStatements[0], text: profile.bio };
+    if (activeBioIndex === 0) switchBio(0);
+  }
+}
+
+// --- 모달 열기/닫기 ---
+const profileModal = document.getElementById("profile-edit-modal");
+const openProfileEditBtn = document.getElementById("open-profile-edit-btn");
+const closeProfileEditBtn = document.getElementById("close-profile-edit-btn");
+
+const editNicknameInput = document.getElementById("edit-nickname");
+const editBioTextarea = document.getElementById("edit-bio");
+const editAvatarUrlInput = document.getElementById("edit-avatar-url");
+const bioCharCount = document.getElementById("bio-char-count");
+const modalAvatarPreview = document.getElementById("modal-avatar-preview");
+const profileEditForm = document.getElementById("profile-edit-form");
+const profileResetBtn = document.getElementById("profile-reset-btn");
+
+function openProfileModal() {
+  const profile = loadProfile();
+  if (editNicknameInput) editNicknameInput.value = profile.nickname;
+  if (editBioTextarea) {
+    editBioTextarea.value = profile.bio;
+    updateBioCharCount();
+  }
+  if (editAvatarUrlInput) editAvatarUrlInput.value = profile.avatarUrl;
+  updateModalAvatarPreview(profile.avatarUrl, profile.nickname);
+
+  profileModal.removeAttribute("hidden");
+  profileModal.classList.add("is-open");
+  document.body.style.overflow = "hidden";
+  if (editNicknameInput) editNicknameInput.focus();
+}
+
+function closeProfileModal() {
+  profileModal.setAttribute("hidden", "");
+  profileModal.classList.remove("is-open");
+  document.body.style.overflow = "";
+}
+
+function updateBioCharCount() {
+  if (bioCharCount && editBioTextarea) {
+    bioCharCount.textContent = editBioTextarea.value.length;
+  }
+}
+
+function updateModalAvatarPreview(url, nickname) {
+  if (!modalAvatarPreview) return;
+  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(nickname || "VV")}&background=e60012&color=fff&size=100&bold=true`;
+  modalAvatarPreview.src = url || fallback;
+  modalAvatarPreview.onerror = () => { modalAvatarPreview.src = fallback; };
+}
+
+// --- 닉네임 유효성 검사 ---
+function validateNickname(value) {
+  const trimmed = value.trim();
+  if (trimmed.length < 2) return "닉네임은 최소 2자 이상이어야 합니다.";
+  if (trimmed.length > 20) return "닉네임은 최대 20자까지 가능합니다.";
+  if (/[<>"'`]/.test(trimmed)) return "사용할 수 없는 특수문자가 포함되어 있습니다.";
+  return null;
+}
+
+// --- 이벤트 바인딩 ---
+if (openProfileEditBtn) {
+  openProfileEditBtn.addEventListener("click", openProfileModal);
+}
+
+if (closeProfileEditBtn) {
+  closeProfileEditBtn.addEventListener("click", closeProfileModal);
+}
+
+// 오버레이 클릭 시 모달 닫기
+if (profileModal) {
+  profileModal.addEventListener("click", (e) => {
+    if (e.target === profileModal) closeProfileModal();
+  });
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && profileModal && !profileModal.hasAttribute("hidden")) {
+    closeProfileModal();
+  }
+});
+
+// 바이오 글자 수 카운터 실시간 업데이트
+if (editBioTextarea) {
+  editBioTextarea.addEventListener("input", updateBioCharCount);
+}
+
+// 아바타 URL 입력 시 미리보기 실시간 반영
+if (editAvatarUrlInput) {
+  editAvatarUrlInput.addEventListener("input", () => {
+    const nick = editNicknameInput ? editNicknameInput.value : "VV";
+    updateModalAvatarPreview(editAvatarUrlInput.value.trim(), nick);
+  });
+}
+
+// 저장 (폼 제출)
+if (profileEditForm) {
+  profileEditForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nickname = editNicknameInput ? editNicknameInput.value.trim() : "";
+    const nicknameError = validateNickname(nickname);
+    if (nicknameError) {
+      showRetroAlert("⚠️ " + nicknameError);
+      editNicknameInput.focus();
+      return;
+    }
+
+    const bio = editBioTextarea ? editBioTextarea.value.trim() : "";
+    const avatarUrl = editAvatarUrlInput ? editAvatarUrlInput.value.trim() : "";
+
+    const updatedProfile = {
+      ...loadProfile(),
+      nickname,
+      bio: bio || DEFAULT_PROFILE.bio,
+      avatarUrl: avatarUrl || DEFAULT_PROFILE.avatarUrl,
+    };
+
+    saveProfile(updatedProfile);
+    applyProfileToDOM(updatedProfile);
+    closeProfileModal();
+    showRetroAlert("✅ PROFILE SAVED TO CARTRIDGE!");
+  });
+}
+
+// 초기화 버튼
+if (profileResetBtn) {
+  profileResetBtn.addEventListener("click", () => {
+    if (editNicknameInput) editNicknameInput.value = DEFAULT_PROFILE.nickname;
+    if (editBioTextarea) {
+      editBioTextarea.value = DEFAULT_PROFILE.bio;
+      updateBioCharCount();
+    }
+    if (editAvatarUrlInput) editAvatarUrlInput.value = DEFAULT_PROFILE.avatarUrl;
+    updateModalAvatarPreview(DEFAULT_PROFILE.avatarUrl, DEFAULT_PROFILE.nickname);
+    showRetroAlert("🔄 RESET TO FACTORY DEFAULTS!");
+  });
+}
+
+// --- 페이지 로드 시 저장된 프로필 복원 ---
+applyProfileToDOM(loadProfile());

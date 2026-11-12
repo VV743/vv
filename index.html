@@ -19,13 +19,14 @@
       <div class="mascot-group">
         <!-- 2001 Mario Mascot Avatar Cutout -->
         <div class="mario-cutout-frame">
-          <img src="https://avatars.githubusercontent.com/u/188890878?v=4" alt="김태우 아바타" class="mario-avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=VV&background=e60012&color=fff&size=100&bold=true'">
+          <img id="profile-avatar-img" src="https://avatars.githubusercontent.com/u/188890878?v=4" alt="김태우 아바타" class="mario-avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=VV&background=e60012&color=fff&size=100&bold=true'">
           <span class="mario-cap-badge">★ 2001</span>
+          <button type="button" id="open-profile-edit-btn" class="profile-edit-badge" title="프로필 편집">✎</button>
         </div>
         <!-- Speech Bubble -->
         <div class="speech-bubble">
           <span class="bubble-arrow"></span>
-          <p class="bubble-text">Welcome to <strong>VV743.com</strong>! It's-a Me, 김태우!</p>
+          <p class="bubble-text">Welcome to <strong id="profile-site-name">VV743.com</strong>! It's-a Me, <span id="profile-nickname">김태우</span>!</p>
         </div>
       </div>
 
@@ -475,6 +476,69 @@
       </div>
     </footer>
 
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 프로필 편집 모달 (SCR-08: Profile Edit Modal)            -->
+  <!-- ======================================================== -->
+  <div id="profile-edit-modal" class="profile-modal-overlay" role="dialog" aria-modal="true" aria-label="프로필 편집" hidden>
+    <div class="profile-modal-box">
+      <!-- 모달 헤더 -->
+      <div class="profile-modal-header carbon-slab">
+        <div class="label-glyph">≡</div>
+        <h2 class="section-title">PLAYER PROFILE EDITOR</h2>
+        <button type="button" id="close-profile-edit-btn" class="profile-modal-close" aria-label="닫기">✕</button>
+      </div>
+
+      <!-- 모달 바디 -->
+      <div class="profile-modal-body inset-content">
+
+        <!-- 아바타 미리보기 -->
+        <div class="profile-avatar-preview-row">
+          <img id="modal-avatar-preview" src="" alt="아바타 미리보기" class="modal-avatar-img">
+          <div class="avatar-preview-label">AVATAR PREVIEW</div>
+        </div>
+
+        <form id="profile-edit-form" autocomplete="off">
+
+          <!-- 닉네임 -->
+          <div class="profile-field-group">
+            <label class="profile-field-label" for="edit-nickname">PLAYER NICKNAME</label>
+            <input type="text" id="edit-nickname" class="text-input profile-text-input"
+              placeholder="닉네임 입력 (2~20자)" maxlength="20" required>
+            <span class="profile-field-hint">2~20자, 특수문자 일부 제한</span>
+          </div>
+
+          <!-- 채널 소개 -->
+          <div class="profile-field-group">
+            <label class="profile-field-label" for="edit-bio">CHANNEL DESCRIPTION</label>
+            <textarea id="edit-bio" class="text-input profile-textarea"
+              placeholder="채널 소개를 입력하세요 (최대 300자)" maxlength="300" rows="4"></textarea>
+            <span class="profile-field-hint"><span id="bio-char-count">0</span> / 300자</span>
+          </div>
+
+          <!-- 아바타 URL -->
+          <div class="profile-field-group">
+            <label class="profile-field-label" for="edit-avatar-url">AVATAR IMAGE URL</label>
+            <input type="url" id="edit-avatar-url" class="text-input profile-text-input"
+              placeholder="https://example.com/avatar.png">
+            <span class="profile-field-hint">비워두면 기본 이미지 유지</span>
+          </div>
+
+          <!-- 액션 버튼 -->
+          <div class="profile-action-bar">
+            <button type="button" id="profile-reset-btn" class="button-primary amber-chip">
+              RESET DEFAULT
+            </button>
+            <button type="submit" class="button-submit">
+              <span>SAVE PROFILE</span>
+              <span class="button-icon-arrow">➔</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- 콘솔 하드웨어 카트리지 알림 팝업 (Toast) -->
